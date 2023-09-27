@@ -8,8 +8,12 @@ export default function ToDo() {
   const [newTask, setNewTask] = useState('');
 
   const addTask = () => {
-    console.log(tasks);
-    if (newTask.trim() !== "") {
+    if (newTask.trim() === "") {
+  alert("Please add a task.")
+    }
+    
+    
+    else{
       setTasks([...tasks, {text: newTask, completed:false}]);
       setNewTask("");
     }
