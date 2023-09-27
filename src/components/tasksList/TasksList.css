@@ -1,0 +1,7 @@
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  list-style-type: none;
+  padding: 0;
+}

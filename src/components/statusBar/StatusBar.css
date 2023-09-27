@@ -1,0 +1,22 @@
+.statusBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    color:white;
+    gap: 10px;
+}
+
+.statusBar span {
+    border-radius: 5px;
+    padding: 0.3rem;
+}
+
+.allTasks {
+    background-color: rgb(62, 62, 251);
+}
+.complete {
+    background-color: rgb(31, 111, 39);
+}
+.incomplete {
+    background-color: rgb(176, 49, 49);
+}

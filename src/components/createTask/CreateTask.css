@@ -1,0 +1,24 @@
+.createTask {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid gray ;
+    padding: 0.5rem;
+}
+
+.createTask input {
+    border: none;
+}
+.createTask button {
+    border-radius: 50%;
+    background-color: rgb(62, 62, 251);
+    color:white;
+    padding: 0.5rem;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.createTask button:hover {
+    cursor: pointer;
+    background-color: rgb(104, 104, 241);
+}
