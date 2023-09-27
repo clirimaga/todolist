@@ -37,7 +37,7 @@ export default function ToDo() {
       <CreateTask addTask={addTask} newTask={newTask} setNewTask={setNewTask} />
       <StatusBar tasks={tasks} />
       <TasksList tasks={tasks} newTask={newTask} removeTodo={removeTodo} toggleTaskCompletion={toggleTaskCompletion}/>
-      <button onClick={clearCompletedTasks} className='clearButton' >Clear completed tasks</button>
+      <button onClick={clearCompletedTasks} className='clearButton' >Clear Completed Tasks</button>
     </section>
   );
 }

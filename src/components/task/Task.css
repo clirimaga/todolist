@@ -4,23 +4,49 @@
   border-top: 1px solid gray;
   margin: 0;
   font-size: 1.5rem;
-  color:gray;
+  color: gray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .completed {
   background-color: rgba(128, 128, 128, 0.2);
 }
 
-.task input {
-    width: 1.2rem;
-    height: 1.2rem;
-    margin: 0 1rem;
+.inputs {
+  display: flex;
+  text-align: center;
+  gap: 0.5rem;
 }
-.task button {
+.buttons {
+  display: flex;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.task input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.task input[type="text"] {
+  width: auto;
+  height: 1.2rem;
+  border: 2px solid transparent;
+  background-color: inherit;
+  font-size: 1.2rem;
+}
+.task input[type="text"]:focus {
+  border: 2px solid blue;
+  outline: none;
+}
+
+.buttons button {
   background-color: red;
   border: none;
   color: white;
-  border-radius: 50%;
+  border-radius: 5px;
   padding: 0.3rem;
   font-size: 1.2rem;
   justify-self: flex-end;
