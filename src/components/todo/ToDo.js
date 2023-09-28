@@ -11,8 +11,6 @@ export default function ToDo() {
     if (newTask.trim() === "") {
   alert("Please add a task.")
     }
-    
-    
     else{
       setTasks([...tasks, {text: newTask, completed:false}]);
       setNewTask("");
@@ -41,7 +39,7 @@ export default function ToDo() {
       <CreateTask addTask={addTask} newTask={newTask} setNewTask={setNewTask} />
       <StatusBar tasks={tasks} />
       <TasksList tasks={tasks} newTask={newTask} removeTodo={removeTodo} toggleTaskCompletion={toggleTaskCompletion}/>
-      <button onClick={clearCompletedTasks} className='clearButton' >Clear Completed Tasks</button>
+      {tasks.length >= 1 && <button onClick={clearCompletedTasks} className='clearButton' >Clear Completed Tasks</button>}
     </section>
   );
 }
