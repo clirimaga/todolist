@@ -5,8 +5,8 @@ import './TasksList.css'
 export default function TasksList({ tasks,removeTodo,toggleTaskCompletion}) {
   return (
     <ul className="tasksList">
-      {tasks.map((task,id) => {
-        return <Task task={task} key={id} id={id}  removeTodo={removeTodo} toggleTaskCompletion={toggleTaskCompletion}/>;
+      {tasks.map((task,index) => {
+        return <Task task={task} key={task.text} index={index}  removeTodo={removeTodo} toggleTaskCompletion={toggleTaskCompletion}/>;
       })}
     </ul>
   );

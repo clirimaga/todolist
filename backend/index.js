@@ -1,37 +1,80 @@
-require("dotenv").config();
+// server.js
 const express = require('express');
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const db = require('./db');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mysql = require('mysql');
 
-
-require("./db");
 const app = express();
+const port = process.env.PORT ||  7000;
 
-app.use(express.json());
-app.use(bodyParser.json())
 app.use(cors());
+app.use(bodyParser.json());
 
-app.get('/',(req,res) => {
-    res.send("Hello")
-})
+const db = mysql.createConnection({
+  host: 'db4free.net',
+  user: 'clirim',
+  password: 'Clirim.1',
+  database: 'todolistclirim',
+});
 
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+  } else {
+    console.log('Connected to MySQL');
+  }
+});
+app.post('/tasks', (req, res) => {
+  const { text, completed } = req.body;
+  const sql = `INSERT INTO tasks (text, completed) VALUES (${text}, ${completed})`;
+  db.query(sql, [text, completed], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.status(201).json({ id: result.insertId });
+    }
+  });
+});
 
-// example
-// app.get('/api/data', (req, res) => {
-//     const sql = 'SELECT * FROM your_table_name';
-  
-//     db.query(sql, (err, result) => {
-//       if (err) {
-//         console.error('MySQL query error:', err);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//       } else {
-//         res.json(result);
-//       }
-//     });
-//   });
+// Read
+app.get('/tasks', (req, res) => {
+  const sql = 'SELECT * FROM tasks';
+  db.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
-const port = process.env.port || 5000;
+// Update
+app.put('/tasks/:id', (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+  const sql = `UPDATE tasks SET completed = ? WHERE id = ${id}`;
+  db.query(sql, [completed, id], (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+app.delete('/tasks/:id', (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const sql = `DELETE FROM tasks WHERE id = ${id}`;
+  db.query(sql, [id], (err) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
 app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-})
+  console.log(`Server is running on port ${port}`);
+});

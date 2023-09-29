@@ -4,4 +4,6 @@
   align-items: flex-start;
   list-style-type: none;
   padding: 0;
+  max-height: 20rem;
+  overflow-y: scroll;
 }

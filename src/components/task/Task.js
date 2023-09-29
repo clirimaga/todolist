@@ -1,7 +1,12 @@
 import { useState, useRef } from "react";
 import "./Task.css";
 
-export default function Task({ task, id, removeTodo, toggleTaskCompletion }) {
+export default function Task({
+  task,
+  index,
+  removeTodo,
+  toggleTaskCompletion,
+}) {
   const [readOnly, setReadOnly] = useState(true);
   const [inputValue, setInputValue] = useState(task.text);
 
@@ -12,7 +17,7 @@ export default function Task({ task, id, removeTodo, toggleTaskCompletion }) {
 
   const handleEditClick = () => {
     setReadOnly((prevVal) => !prevVal);
-    if (inputRef.current) {
+    if (inputRef.current && editSaveButton === "Edit") {
       inputRef.current.focus();
     }
   };
@@ -23,7 +28,7 @@ export default function Task({ task, id, removeTodo, toggleTaskCompletion }) {
         <input
           type="checkbox"
           checked={task.completed}
-          onChange={() => toggleTaskCompletion(id)}
+          onChange={() => toggleTaskCompletion(index)}
         ></input>
         <input
           type="text"
@@ -34,8 +39,12 @@ export default function Task({ task, id, removeTodo, toggleTaskCompletion }) {
         />
       </div>
       <div className="buttons">
-        <button onClick={() => removeTodo(id)}>Delete</button>
-        <button onClick={handleEditClick}>{editSaveButton}</button>
+        <button onClick={() => removeTodo(index)} title="Delete Task">
+          Delete
+        </button>
+        <button onClick={handleEditClick} title={`${editSaveButton} Task`}>
+          {editSaveButton}
+        </button>
       </div>
     </li>
   );
