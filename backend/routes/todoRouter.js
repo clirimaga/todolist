@@ -1,14 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const todolist = require('../services/todolist');
+const express = require("express");
 
-router.get('/', async function(req, res, next) {
-  try {
-    res.json(await todolist.getMultiple(req.query.page));
-  } catch (err) {
-    console.error(`Error while getting tasks `, err.message);
-    next(err);
-  }
-});
+const todoRouter = express.Router();
 
-module.exports = router;
+const {
+  getTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+} = require("../controllers/todoController");
+
+todoRouter.get("/", getTodos);
+
+// todoRouter.get("/", getTodo);
+
+todoRouter.post("/", createTodo);
+
+todoRouter.put("/:id", updateTodo);
+
+todoRouter.delete("/:id", deleteTodo);
+
+module.exports = {
+  todoRouter,
+};

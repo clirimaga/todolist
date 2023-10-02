@@ -39,12 +39,13 @@ export default function Task({
         />
       </div>
       <div className="buttons">
-        <button onClick={() => removeTodo(index)} title="Delete Task">
+        <button onClick={() => removeTodo(task.id)} title="Delete Task">
           Delete
         </button>
         <button onClick={handleEditClick} title={`${editSaveButton} Task`}>
           {editSaveButton}
         </button>
+        {task.id}
       </div>
     </li>
   );
