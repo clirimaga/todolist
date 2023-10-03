@@ -4,19 +4,15 @@ import CreateTask from "../createTask/CreateTask";
 import TasksList from "../tasksList/TasksList";
 import StatusBar from "../statusBar/StatusBar";
 import "./ToDo.css";
+import SkeletonTask from "../skeletons/SkeletonTask";
 
 export default function ToDo() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:7000/tasks")
-      .then((response) => setTasks(response.data))
-      .catch((error) => console.error("Error fetching tasks:", error));
-  }, []);
+  const [tasksLoading, setTasksLoading] = useState(false);
 
   const addTask = () => {
+    setTasksLoading(true);
     if (newTask.trim() === "") {
       alert("Please add a task.");
     } else {
@@ -31,17 +27,21 @@ export default function ToDo() {
             { id: response.data.id, text: newTask, completed: false },
           ]);
           setNewTask("");
+          setTasksLoading(false);
+          console.log(tasks);
         })
         .catch((error) => console.error("Error adding task:", error));
     }
   };
 
   const toggleTaskCompletion = (id) => {
+    setTasksLoading(true);
     axios
       .put(`http://localhost:7000/tasks/${id}`, {
         completed: !tasks.find((task) => task.id === id).completed,
       })
-      .then(() => {
+      .then((response) => {
+        // console.log('Backend Response:', response.data);
         const updatedTasks = tasks.map((task) => {
           if (task.id === id) {
             return { ...task, completed: !task.completed };
@@ -49,23 +49,32 @@ export default function ToDo() {
           return task;
         });
         setTasks(updatedTasks);
+        setTasksLoading(false);
       })
-      .catch((error) =>
-        console.error("Error toggling task completion:", error)
-      );
+      .catch((error) => {
+        console.error("Error toggling task completion:", error);
+        setTasksLoading(false);
+      });
   };
 
   const removeTodo = (id) => {
+    setTasksLoading(true);
     axios
       .delete(`http://localhost:7000/tasks/${id}`)
       .then((res) => {
+        // console.log(res);
         const updatedTasks = tasks.filter((task) => task.id !== id);
         setTasks(updatedTasks);
+        setTasksLoading(false);
       })
-      .catch((error) => console.error("Error removing task:", error));
+      .catch((error) => {
+        console.error("Error removing task:", error);
+        setTasksLoading(true);
+      });
   };
 
   const clearCompletedTasks = () => {
+    setTasksLoading(true);
     const completedTaskIds = tasks
       .filter((task) => task.completed)
       .map((task) => task.id);
@@ -76,22 +85,47 @@ export default function ToDo() {
       .then(() => {
         const incompleteTasks = tasks.filter((task) => !task.completed);
         setTasks(incompleteTasks);
+        setTasksLoading(false);
       })
-      .catch((error) =>
-        console.error("Error clearing completed tasks:", error)
-      );
+      .catch((error) => {
+        console.error("Error clearing completed tasks:", error);
+        setTasksLoading(false);
+      });
   };
+
+  useEffect(() => {
+    setTasksLoading(true);
+    axios
+      .get("http://localhost:7000/tasks")
+      .then((response) => {
+        setTasks(response.data);
+        // console.log(tasks);
+        setTasksLoading(false);
+      })
+      .catch((error) => console.error("Error fetching tasks:", error));
+  },[]);
+
   return (
     <section className="todo">
       <CreateTask addTask={addTask} newTask={newTask} setNewTask={setNewTask} />
       <StatusBar tasks={tasks} />
-      <TasksList
-        tasks={tasks}
-        newTask={newTask}
-        removeTodo={removeTodo}
-        toggleTaskCompletion={toggleTaskCompletion}
-      />
-      {tasks.length >= 1 && (
+      {tasksLoading && (
+        <div className="skeletons">
+          <SkeletonTask />
+          <SkeletonTask />
+          <SkeletonTask />
+        </div>
+      )}
+      {!tasksLoading && (
+        <TasksList
+          tasks={tasks}
+          newTask={newTask}
+          removeTodo={removeTodo}
+          toggleTaskCompletion={toggleTaskCompletion}
+        />
+      )}
+
+      {tasks.some((task) => task.completed) && (
         <button onClick={clearCompletedTasks} className="clearButton">
           Clear Completed Tasks
         </button>

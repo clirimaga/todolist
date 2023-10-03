@@ -20,3 +20,9 @@
     cursor: pointer;
     background-color: rgba(128, 128, 128,0.1);
 }
+
+.skeletons {
+    display: flex;
+    flex-direction: column;
+    gap:4px;
+}

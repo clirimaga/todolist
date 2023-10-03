@@ -3,14 +3,14 @@ import "./Task.css";
 
 export default function Task({
   task,
-  index,
   removeTodo,
+  index,
   toggleTaskCompletion,
 }) {
   const [readOnly, setReadOnly] = useState(true);
   const [inputValue, setInputValue] = useState(task.text);
 
-  const taskClasses = task.completed === true ? "task completed" : " task";
+  const taskClasses = task.completed  ? "task completed" : " task";
   const editSaveButton = readOnly ? "Edit" : "Save";
 
   const inputRef = useRef(null);
@@ -28,7 +28,7 @@ export default function Task({
         <input
           type="checkbox"
           checked={task.completed}
-          onChange={() => toggleTaskCompletion(index)}
+          onChange={() => toggleTaskCompletion(task.id)}
         ></input>
         <input
           type="text"
@@ -45,7 +45,6 @@ export default function Task({
         <button onClick={handleEditClick} title={`${editSaveButton} Task`}>
           {editSaveButton}
         </button>
-        {task.id}
       </div>
     </li>
   );

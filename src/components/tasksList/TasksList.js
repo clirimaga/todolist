@@ -6,7 +6,7 @@ export default function TasksList({ tasks,removeTodo,toggleTaskCompletion}) {
   return (
     <ul className="tasksList">
       {tasks && tasks.map((task,index) => {
-        return <Task task={task} key={task.text} index={index}  removeTodo={removeTodo} toggleTaskCompletion={toggleTaskCompletion}/>;
+        return <Task task={task} key={index} index={index} removeTodo={removeTodo} toggleTaskCompletion={toggleTaskCompletion}/>;
       })}
     </ul>
   );

@@ -1,21 +1,13 @@
 import "./StatusBar.css";
-import { useMemo } from 'react';
+import { useMemo } from "react";
 export default function StatusBar({ tasks }) {
-
   const countItemsByCompletion = useMemo(() => {
-    function countItems(arrayOfObjects, completedValue) {
-      let count = 0;
-      for (let i = 0; i < arrayOfObjects.length; i++) {
-        if (arrayOfObjects[i].completed === completedValue) {
-          count++;
-        }
-      }
-      return count;
-    }
+    const completedCount = tasks.filter((task) => task.completed).length;
+    const incompleteCount = tasks.filter((task) => !task.completed).length;
 
     return {
-      completed: countItems(tasks, true),
-      incomplete: countItems(tasks, false),
+      completed: completedCount,
+      incomplete: incompleteCount,
     };
   }, [tasks]);
 
