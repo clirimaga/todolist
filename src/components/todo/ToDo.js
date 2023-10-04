@@ -57,6 +57,23 @@ export default function ToDo() {
       });
   };
 
+  const updateTaskText = (taskId, newText) => {
+    setTasksLoading(true);
+    axios
+      .put(`http://localhost:7000/tasks/${taskId}`, { text: newText })
+      .then((response) => {
+        const updatedTasks = tasks.map((task) =>
+          task.id === taskId ? { ...task, text: newText } : task
+        );
+        setTasks(updatedTasks);
+        setTasksLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error updating task text:", error);
+        setTasksLoading(false);
+      });
+  };
+  
   const removeTodo = (id) => {
     setTasksLoading(true);
     axios
@@ -122,6 +139,7 @@ export default function ToDo() {
           newTask={newTask}
           removeTodo={removeTodo}
           toggleTaskCompletion={toggleTaskCompletion}
+          updateTaskText={updateTaskText}
         />
       )}
 

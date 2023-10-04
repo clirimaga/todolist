@@ -1,4 +1,6 @@
 const { db } = require("../db");
+const util = require("util");
+const queryAsync = util.promisify(db.query).bind(db);
 
 const getTodos = async (req, res) => {
   const sql = "SELECT * FROM tasks";
@@ -10,17 +12,6 @@ const getTodos = async (req, res) => {
     }
   });
 };
-
-// const getTodo = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const todos = await db.query(`SELECT  FROM tasks tasks WHERE id=$1`, [id]);
-//     res.json(todos.rows);
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(400).send("bad request");
-//   }
-// };
 
 const createTodo = async (req, res) => {
   try {
@@ -48,15 +39,39 @@ const updateTodo = async (req, res) => {
   try {
     const { id } = req.params;
     const { text, completed } = req.body;
-    const updatedTodo = await db.query(
-      "UPDATE tasks SET text = COALESCE(?, text), completed = ? WHERE id = ?",
-      [text, completed, id]
+    console.log(id);
+    console.log(text, completed);
+
+    // Fetch the existing task details
+    const existingTodoResult = await queryAsync(
+      "SELECT * FROM tasks WHERE id = ?",
+      [id]
     );
+    console.log(existingTodoResult);
+
+    if (!existingTodoResult || existingTodoResult.length === 0) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    const existingTodo = existingTodoResult[0];
+    console.log(existingTodo);
+
+    // Use the existing values if new values are not provided
+    const updatedText = text !== undefined ? text : existingTodo.text;
+    const updatedCompleted =
+      completed !== undefined ? completed : existingTodo.completed;
+
+    // Update the task
+    await queryAsync("UPDATE tasks SET text = ?, completed = ? WHERE id = ?", [
+      updatedText,
+      updatedCompleted,
+      id,
+    ]);
 
     res.status(200).json({ message: "Task updated successfully" });
   } catch (error) {
     console.error(error.message);
-    res.status(400).send("bad request");
+    res.status(400).send("Bad request");
   }
 };
 
@@ -76,16 +91,16 @@ const deleteCompletedTodos = async (req, res) => {
     const { ids } = req.body;
 
     if (!ids || !Array.isArray(ids)) {
-      return res.status(400).json({ message: 'Invalid request body' });
+      return res.status(400).json({ message: "Invalid request body" });
     }
 
     // Use the WHERE IN clause to delete multiple tasks at once
-    const result = await db.query('DELETE FROM tasks WHERE id IN (?)', [ids]);
+    const result = await db.query("DELETE FROM tasks WHERE id IN (?)", [ids]);
 
-    res.status(200).json({ message: 'Completed tasks deleted successfully' });
+    res.status(200).json({ message: "Completed tasks deleted successfully" });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -94,5 +109,5 @@ module.exports = {
   createTodo,
   updateTodo,
   deleteTodo,
-  deleteCompletedTodos
+  deleteCompletedTodos,
 };

@@ -6,6 +6,7 @@ export default function Task({
   removeTodo,
   index,
   toggleTaskCompletion,
+  updateTaskText
 }) {
   const [readOnly, setReadOnly] = useState(true);
   const [inputValue, setInputValue] = useState(task.text);
@@ -15,10 +16,22 @@ export default function Task({
 
   const inputRef = useRef(null);
 
+  // const handleEditClick = () => {
+  //   setReadOnly((prevVal) => !prevVal);
+  //   if (inputRef.current && editSaveButton === "Edit") {
+  //     inputRef.current.focus();
+  //   }
+  // };
+
   const handleEditClick = () => {
-    setReadOnly((prevVal) => !prevVal);
-    if (inputRef.current && editSaveButton === "Edit") {
-      inputRef.current.focus();
+    if (readOnly) {
+      setReadOnly(false);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    } else {
+      setReadOnly(true);
+      updateTaskText(task.id, inputValue);
     }
   };
 
