@@ -1,0 +1,26 @@
+.navbar {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+  height: 15vh;
+  border-bottom: 1px solid white;
+  align-items: center;
+}
+
+ul {
+  text-decoration: none;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  list-style-type: none;
+  text-align: center;
+  list-style: none;
+}
