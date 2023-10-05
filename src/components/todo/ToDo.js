@@ -5,11 +5,26 @@ import TasksList from "../tasksList/TasksList";
 import StatusBar from "../statusBar/StatusBar";
 import "./ToDo.css";
 import SkeletonTask from "../skeletons/SkeletonTask";
+import { NavLink } from "react-router-dom";
 
-export default function ToDo() {
+export default function ToDo({ loggedIn }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [tasksLoading, setTasksLoading] = useState(false);
+
+  const fetchTasks = () => {
+    setTasksLoading(true);
+    axios
+      .get("http://localhost:7000/tasks")
+      .then((response) => {
+        setTasks(response.data);
+        setTasksLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+        setTasksLoading(false);
+      });
+  };
 
   const addTask = () => {
     setTasksLoading(true);
@@ -28,7 +43,7 @@ export default function ToDo() {
           ]);
           setNewTask("");
           setTasksLoading(false);
-          console.log(tasks);
+          fetchTasks();
         })
         .catch((error) => console.error("Error adding task:", error));
     }
@@ -50,6 +65,7 @@ export default function ToDo() {
         });
         setTasks(updatedTasks);
         setTasksLoading(false);
+        fetchTasks();
       })
       .catch((error) => {
         console.error("Error toggling task completion:", error);
@@ -67,13 +83,14 @@ export default function ToDo() {
         );
         setTasks(updatedTasks);
         setTasksLoading(false);
+        fetchTasks();
       })
       .catch((error) => {
         console.error("Error updating task text:", error);
         setTasksLoading(false);
       });
   };
-  
+
   const removeTodo = (id) => {
     setTasksLoading(true);
     axios
@@ -83,6 +100,7 @@ export default function ToDo() {
         const updatedTasks = tasks.filter((task) => task.id !== id);
         setTasks(updatedTasks);
         setTasksLoading(false);
+        fetchTasks();
       })
       .catch((error) => {
         console.error("Error removing task:", error);
@@ -103,6 +121,7 @@ export default function ToDo() {
         const incompleteTasks = tasks.filter((task) => !task.completed);
         setTasks(incompleteTasks);
         setTasksLoading(false);
+        fetchTasks();
       })
       .catch((error) => {
         console.error("Error clearing completed tasks:", error);
@@ -111,44 +130,54 @@ export default function ToDo() {
   };
 
   useEffect(() => {
-    setTasksLoading(true);
-    axios
-      .get("http://localhost:7000/tasks")
-      .then((response) => {
-        setTasks(response.data);
-        // console.log(tasks);
-        setTasksLoading(false);
-      })
-      .catch((error) => console.error("Error fetching tasks:", error));
-  },[]);
-
+    fetchTasks();
+  }, []);
   return (
-    <section className="todo">
-      <CreateTask addTask={addTask} newTask={newTask} setNewTask={setNewTask} />
-      <StatusBar tasks={tasks} />
-      {tasksLoading && (
-        <div className="skeletons">
-          <SkeletonTask />
-          <SkeletonTask />
-          <SkeletonTask />
+    <>
+      {!loggedIn ? (
+        <div className="notloggedIn">
+          <h3>You have to login first in order to see the tasks</h3>
+          <NavLink to="/login" className="toLoginButton">
+            To login
+          </NavLink>
         </div>
-      )}
-      {!tasksLoading && (
-        <TasksList
-          tasks={tasks}
-          newTask={newTask}
-          removeTodo={removeTodo}
-          toggleTaskCompletion={toggleTaskCompletion}
-          updateTaskText={updateTaskText}
-        />
-      )}
+      ) : (
+        <>
+          <section className="todo">
+            <CreateTask
+              addTask={addTask}
+              newTask={newTask}
+              setNewTask={setNewTask}
+            />
+            <StatusBar tasks={tasks} />
+            {tasksLoading && (
+              <div className="skeletons">
+                <SkeletonTask />
+                <SkeletonTask />
+                <SkeletonTask />
+                <SkeletonTask />
+                <SkeletonTask />
+              </div>
+            )}
+            {!tasksLoading && (
+              <TasksList
+                tasks={tasks}
+                newTask={newTask}
+                removeTodo={removeTodo}
+                toggleTaskCompletion={toggleTaskCompletion}
+                updateTaskText={updateTaskText}
+              />
+            )}
 
-      {tasks.some((task) => task.completed) && (
-        <button onClick={clearCompletedTasks} className="clearButton">
-          Clear Completed Tasks
-        </button>
+            {tasks.some((task) => task.completed) && (
+              <button onClick={clearCompletedTasks} className="clearButton">
+                Clear Completed Tasks
+              </button>
+            )}
+          </section>
+        </>
       )}
-    </section>
+    </>
   );
 }
 

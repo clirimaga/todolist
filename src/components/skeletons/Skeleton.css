@@ -18,14 +18,14 @@
 }
 
 .skeleton.avatar {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
 }
 
 .skeleton.thumbnail {
-    width: 200px;
-    height: 200px;
+  width: 200px;
+  height: 200px;
 }
 
 .skeleton.checkbox {
@@ -38,7 +38,7 @@
   height: 20px;
 }
 
-.skeleton-wrapper{
+.skeleton-wrapper {
   position: relative;
   overflow: hidden;
 }
@@ -46,6 +46,8 @@
 .skeleton-task {
   display: flex;
   flex-direction: row;
+  min-height: 4rem;
+  height: 5rem;
   align-items: center;
   justify-content: space-between;
   align-content: center;
@@ -54,23 +56,29 @@
 
 .shimmer-wrapper {
   position: absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  animation: loading 2.5s ease-in-out 0s infinite;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: loading 1s ease-in-out 0s infinite;
 }
 
 .shimmer {
   width: 50%;
-  height:100%;
-  background: rgba(255,255,255,0.2);
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
   transform: skewX(-20deg);
   box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes loading {
-  0% { transform: translateX(-150%);}
-  50% {transform: translateX(-60%);}
-  100% {transform: translateX(150%);}
+  0% {
+    transform: translateX(-150%);
+  }
+  50% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
 }

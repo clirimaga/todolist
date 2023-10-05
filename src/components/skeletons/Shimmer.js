@@ -1,5 +1,5 @@
 import React from "react";
-import './Skeleton.css';
+import "./Skeleton.css";
 
 export default function Shimmer() {
   return (

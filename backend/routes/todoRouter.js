@@ -7,7 +7,7 @@ const {
   createTodo,
   updateTodo,
   deleteTodo,
-  deleteCompletedTodos
+  deleteCompletedTodos,
 } = require("../controllers/todoController");
 
 todoRouter.get("/", getTodos);

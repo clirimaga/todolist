@@ -1,28 +1,41 @@
 .todo {
-    background-color: white;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap:1rem;
-    width: 40%;
-    color: black;
+  background-color: rgb(247, 247, 247);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 40%;
+  color: black;
+  max-height: 45rem;
+  min-height: 30rem;
 }
 
 .clearButton {
-    color: gray;
-    background-color: inherit;
-    border: none;
-    padding: 1rem 0.3rem;
-    border-radius: 5px;
+  color: gray;
+  background-color: inherit;
+  border: none;
+  padding: 1rem 0.3rem;
+  border-radius: 5px;
 }
 
 .clearButton:hover {
-    cursor: pointer;
-    background-color: rgba(128, 128, 128,0.1);
+  cursor: pointer;
+  background-color: rgba(128, 128, 128, 0.1);
 }
 
 .skeletons {
-    display: flex;
-    flex-direction: column;
-    gap:4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toLoginButton {
+    color: white;
+    border: 1px solid transparent;
+    padding: 0.5rem
+}
+
+
+.toLoginButton:hover::after {
+    content: '>';
 }

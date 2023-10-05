@@ -20,7 +20,6 @@ const createTodo = async (req, res) => {
       "INSERT INTO tasks (text, completed) VALUES (?, ?)",
       [text, completed]
     );
-
     const lastInsertedId = result.insertId;
 
     const newTodoResult = await db.query("SELECT * FROM tasks WHERE id = ?", [
@@ -39,29 +38,22 @@ const updateTodo = async (req, res) => {
   try {
     const { id } = req.params;
     const { text, completed } = req.body;
-    console.log(id);
-    console.log(text, completed);
 
-    // Fetch the existing task details
     const existingTodoResult = await queryAsync(
       "SELECT * FROM tasks WHERE id = ?",
       [id]
     );
-    console.log(existingTodoResult);
 
     if (!existingTodoResult || existingTodoResult.length === 0) {
       return res.status(404).json({ message: "Task not found" });
     }
 
     const existingTodo = existingTodoResult[0];
-    console.log(existingTodo);
 
-    // Use the existing values if new values are not provided
     const updatedText = text !== undefined ? text : existingTodo.text;
     const updatedCompleted =
       completed !== undefined ? completed : existingTodo.completed;
 
-    // Update the task
     await queryAsync("UPDATE tasks SET text = ?, completed = ? WHERE id = ?", [
       updatedText,
       updatedCompleted,
@@ -94,7 +86,6 @@ const deleteCompletedTodos = async (req, res) => {
       return res.status(400).json({ message: "Invalid request body" });
     }
 
-    // Use the WHERE IN clause to delete multiple tasks at once
     const result = await db.query("DELETE FROM tasks WHERE id IN (?)", [ids]);
 
     res.status(200).json({ message: "Completed tasks deleted successfully" });

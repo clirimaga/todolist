@@ -9,7 +9,6 @@
 .createTask input {
   border: none;
   border-bottom: 2px solid blue;
-
 }
 
 .createTask input[type="text"]:focus {

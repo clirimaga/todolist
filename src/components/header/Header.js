@@ -1,10 +1,7 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Header.css";
 
-export default function Header() {
-  const location = useLocation();
-
-  console.log(location.pathname);
+export default function Header({ loggedIn, setLoggedIn }) {
   return (
     <nav className="navbar">
       <h3>To Do List</h3>
@@ -14,10 +11,16 @@ export default function Header() {
             Home
           </NavLink>
         </li>
-        {location.pathname !== "/login" && (
+        {!loggedIn ? (
           <li>
             <NavLink to="login" className="link">
               Login
+            </NavLink>
+          </li>
+        ) : (
+          <li onClick={() => setLoggedIn(false)}>
+            <NavLink to="/login" className="link">
+              Logout
             </NavLink>
           </li>
         )}

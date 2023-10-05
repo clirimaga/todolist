@@ -8,10 +8,14 @@
 
 main {
   height: 80vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(82, 82, 246)
+  background-color: rgb(82, 82, 246);
+}
+
+a {
+  text-decoration: none;
+  list-style-type: none;
 }
